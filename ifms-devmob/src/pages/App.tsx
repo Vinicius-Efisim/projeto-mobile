@@ -1,5 +1,5 @@
-import Formulario from '../components/Formulario';
-import Lista from '../components/Lista/Lista';
+=import Formulario from '../components/Formulario';
+import Lista from '../components/Lista';
 import style from './App.module.scss';
 import Cronometro from '../components/Cronometro';
 import { useState } from 'react';
@@ -15,6 +15,22 @@ function App() {
       selecionado: tarefa.id === tarefaSelecionada.id ? true : false
     })));
   }
+  function finalizarTarefa() {
+    if (selecionado) {
+      setSelecionado(undefined);
+      setTarefas(tarefasAnteriores => tarefasAnteriores.map(tarefa
+        => {
+        if (tarefa.id === selecionado.id) {
+          return {
+            ...tarefa,
+            selecionado: false,
+            completo: true
+          }
+        }
+        return tarefa
+      }));
+    }
+  }
   return (
     <div className={style.AppStyle}>
       <Formulario setTarefas={setTarefas} />
@@ -22,8 +38,11 @@ function App() {
         tarefas={tarefas}
         selecionaTarefa={selecionaTarefa}
       />
-      <Cronometro selecionado={selecionado} />
+      <Cronometro
+        selecionado={selecionado}
+        finalizarTarefa={finalizarTarefa}
+      />
     </div>
   );
 }
-export default App;
+export default App; F
